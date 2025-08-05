@@ -1,103 +1,121 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { generateClient } from 'aws-amplify/data';
+import type { Schema } from '../../amplify/data/resource';
+import '../lib/amplify-client';
+
+const client = generateClient<Schema>();
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [newTodo, setNewTodo] = useState('');
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  useEffect(() => {
+    listTodos();
+  }, []);
+
+  async function listTodos() {
+    try {
+      const { data: items } = await client.models.Todo.list();
+      setTodos(items);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    }
+  }
+
+  async function createTodo() {
+    if (!newTodo.trim()) return;
+    
+    try {
+      const { data: newTodoItem } = await client.models.Todo.create({
+        content: newTodo,
+        done: false,
+      });
+      if (newTodoItem) {
+        setTodos([...todos, newTodoItem]);
+        setNewTodo('');
+      }
+    } catch (error) {
+      console.error('Error creating todo:', error);
+    }
+  }
+
+  async function toggleTodo(id: string, done: boolean) {
+    try {
+      const { data: updatedTodo } = await client.models.Todo.update({
+        id,
+        done: !done,
+      });
+      if (updatedTodo) {
+        setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
+      }
+    } catch (error) {
+      console.error('Error updating todo:', error);
+    }
+  }
+  return (
+    <div className="font-sans min-h-screen p-8">
+      <main className="max-w-2xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 text-center">
+          🚀 My First AWS Amplify App
+        </h1>
+        <p className="text-center mb-8 text-gray-600">
+          Welcome to your Todo app powered by AWS Amplify Gen2!
+        </p>
+        
+        <div className="mb-6">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && createTodo()}
+              placeholder="Enter a new todo..."
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <button
+              onClick={createTodo}
+              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add Todo
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          {todos.map((todo) => (
+            <div
+              key={todo.id}
+              className="flex items-center gap-3 p-3 border border-gray-200 rounded-md"
+            >
+              <input
+                type="checkbox"
+                checked={todo.done || false}
+                onChange={() => toggleTodo(todo.id, todo.done || false)}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span
+                className={`flex-1 ${
+                  todo.done ? 'line-through text-gray-500' : ''
+                }`}
+              >
+                {todo.content}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {todos.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No todos yet. Add one above to get started!
+          </div>
+        )}
+
+        <div className="mt-12 text-center text-sm text-gray-500">
+          <p>Built with AWS Amplify Gen2 + Next.js + TypeScript</p>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

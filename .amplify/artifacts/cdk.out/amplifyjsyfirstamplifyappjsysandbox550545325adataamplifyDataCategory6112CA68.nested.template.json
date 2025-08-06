@@ -349,7 +349,7 @@
   }
  },
  "Resources": {
-  "TodoTable": {
+  "CategoryTable": {
    "Type": "Custom::AmplifyDynamoDBTable",
    "Properties": {
     "ServiceToken": {
@@ -359,7 +359,7 @@
      "Fn::Join": [
       "",
       [
-       "Todo-",
+       "Category-",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -371,46 +371,12 @@
      {
       "attributeName": "id",
       "attributeType": "S"
-     },
-     {
-      "attributeName": "categoryId",
-      "attributeType": "S"
      }
     ],
     "keySchema": [
      {
       "attributeName": "id",
       "keyType": "HASH"
-     }
-    ],
-    "globalSecondaryIndexes": [
-     {
-      "indexName": "gsi-Category.todos",
-      "keySchema": [
-       {
-        "attributeName": "categoryId",
-        "keyType": "HASH"
-       }
-      ],
-      "projection": {
-       "projectionType": "ALL"
-      },
-      "provisionedThroughput": {
-       "Fn::If": [
-        "ShouldUsePayPerRequestBilling",
-        {
-         "Ref": "AWS::NoValue"
-        },
-        {
-         "ReadCapacityUnits": {
-          "Ref": "DynamoDBModelTableReadIOPS"
-         },
-         "WriteCapacityUnits": {
-          "Ref": "DynamoDBModelTableWriteIOPS"
-         }
-        }
-       ]
-      }
      }
     ],
     "provisionedThroughput": {
@@ -462,10 +428,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/TodoTable/Default/Default"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/CategoryTable/Default/Default"
    }
   },
-  "TodoIAMRole2DA8E66E": {
+  "CategoryIAMRoleBFA67DCD": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -509,7 +475,7 @@
               "Fn::Join": [
                "",
                [
-                "Todo-",
+                "Category-",
                 {
                  "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
                 },
@@ -528,7 +494,7 @@
               "Fn::Join": [
                "",
                [
-                "Todo-",
+                "Category-",
                 {
                  "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
                 },
@@ -551,7 +517,7 @@
      "Fn::Join": [
       "",
       [
-       "TodoIAMRolecfd440-",
+       "CategoryIAMRolec8bbaa-",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -577,10 +543,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/TodoIAMRole/Resource"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/CategoryIAMRole/Resource"
    }
   },
-  "TodoDataSource": {
+  "CategoryDataSource": {
    "Type": "AWS::AppSync::DataSource",
    "Properties": {
     "ApiId": {
@@ -604,7 +570,7 @@
              ":",
              {
               "Fn::GetAtt": [
-               "TodoTable",
+               "CategoryTable",
                "TableArn"
               ]
              }
@@ -617,25 +583,25 @@
       ]
      }
     },
-    "Name": "TodoTable",
+    "Name": "CategoryTable",
     "ServiceRoleArn": {
      "Fn::GetAtt": [
-      "TodoIAMRole2DA8E66E",
+      "CategoryIAMRoleBFA67DCD",
       "Arn"
      ]
     },
     "Type": "AMAZON_DYNAMODB"
    },
    "DependsOn": [
-    "TodoIAMRole2DA8E66E"
+    "CategoryIAMRoleBFA67DCD"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/TodoDataSource/Resource"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/CategoryDataSource/Resource"
    }
   },
-  "QuerygetTodoauth0FunctionQuerygetTodoauth0FunctionAppSyncFunction846D8436": {
+  "QuerygetCategoryauth0FunctionQuerygetCategoryauth0FunctionAppSyncFunction8F9641C7": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -645,7 +611,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QuerygetTodoauth0Function",
+    "Name": "QuerygetCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0224a3e5097427da3f4460b5d6d2b86ad4195c9cb8da7bc13e7187eead1c3ae3.vtl"
     },
@@ -654,10 +620,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QuerygetTodoauth0Function/QuerygetTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QuerygetCategoryauth0Function/QuerygetCategoryauth0Function.AppSyncFunction"
    }
   },
-  "QuerygetTodopostAuth0FunctionQuerygetTodopostAuth0FunctionAppSyncFunction6BE14593": {
+  "QuerygetCategorypostAuth0FunctionQuerygetCategorypostAuth0FunctionAppSyncFunction15BCF356": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -667,7 +633,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QuerygetTodopostAuth0Function",
+    "Name": "QuerygetCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -676,10 +642,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QuerygetTodopostAuth0Function/QuerygetTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QuerygetCategorypostAuth0Function/QuerygetCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "QueryGetTodoDataResolverFnQueryGetTodoDataResolverFnAppSyncFunctionE2B57DAD": {
+  "QueryGetCategoryDataResolverFnQueryGetCategoryDataResolverFnAppSyncFunction664FFE01": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -687,12 +653,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QueryGetTodoDataResolverFn",
+    "Name": "QueryGetCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/08f4d557693d96c1a4efba0f9dc91330e4b19772fd5477c156468843e3d9cb5e.vtl"
     },
@@ -701,39 +667,39 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QueryGetTodoDataResolverFn/QueryGetTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QueryGetCategoryDataResolverFn/QueryGetCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "GetTodoResolver": {
+  "GetCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "getTodo",
+    "FieldName": "getCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "QuerygetTodoauth0FunctionQuerygetTodoauth0FunctionAppSyncFunction846D8436",
+        "QuerygetCategoryauth0FunctionQuerygetCategoryauth0FunctionAppSyncFunction8F9641C7",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "QuerygetTodopostAuth0FunctionQuerygetTodopostAuth0FunctionAppSyncFunction6BE14593",
+        "QuerygetCategorypostAuth0FunctionQuerygetCategorypostAuth0FunctionAppSyncFunction15BCF356",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "QueryGetTodoDataResolverFnQueryGetTodoDataResolverFnAppSyncFunctionE2B57DAD",
+        "QueryGetCategoryDataResolverFnQueryGetCategoryDataResolverFnAppSyncFunction664FFE01",
         "FunctionId"
        ]
       }
@@ -743,7 +709,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"getTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"getCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -762,7 +728,7 @@
                ":",
                {
                 "Fn::GetAtt": [
-                 "TodoTable",
+                 "CategoryTable",
                  "TableArn"
                 ]
                }
@@ -812,10 +778,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/queryGetTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/queryGetCategoryResolver"
    }
   },
-  "QuerylistTodosauth0FunctionQuerylistTodosauth0FunctionAppSyncFunction7D761961": {
+  "QuerylistCategoriesauth0FunctionQuerylistCategoriesauth0FunctionAppSyncFunction5854EFCA": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -825,7 +791,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QuerylistTodosauth0Function",
+    "Name": "QuerylistCategoriesauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/0224a3e5097427da3f4460b5d6d2b86ad4195c9cb8da7bc13e7187eead1c3ae3.vtl"
     },
@@ -834,10 +800,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QuerylistTodosauth0Function/QuerylistTodosauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QuerylistCategoriesauth0Function/QuerylistCategoriesauth0Function.AppSyncFunction"
    }
   },
-  "QuerylistTodospostAuth0FunctionQuerylistTodospostAuth0FunctionAppSyncFunction154D8577": {
+  "QuerylistCategoriespostAuth0FunctionQuerylistCategoriespostAuth0FunctionAppSyncFunction3B411DD0": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -847,7 +813,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QuerylistTodospostAuth0Function",
+    "Name": "QuerylistCategoriespostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -856,10 +822,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QuerylistTodospostAuth0Function/QuerylistTodospostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QuerylistCategoriespostAuth0Function/QuerylistCategoriespostAuth0Function.AppSyncFunction"
    }
   },
-  "QueryListTodosDataResolverFnQueryListTodosDataResolverFnAppSyncFunctionF825FE47": {
+  "QueryListCategoriesDataResolverFnQueryListCategoriesDataResolverFnAppSyncFunctionA98A6BC1": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -867,12 +833,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "QueryListTodosDataResolverFn",
+    "Name": "QueryListCategoriesDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/9fcbe070ecd3023c5bf5b966fa9584757db9762eef123bad0820bd87591b2174.vtl"
     },
@@ -881,39 +847,39 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/QueryListTodosDataResolverFn/QueryListTodosDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/QueryListCategoriesDataResolverFn/QueryListCategoriesDataResolverFn.AppSyncFunction"
    }
   },
-  "ListTodoResolver": {
+  "ListCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "listTodos",
+    "FieldName": "listCategories",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "QuerylistTodosauth0FunctionQuerylistTodosauth0FunctionAppSyncFunction7D761961",
+        "QuerylistCategoriesauth0FunctionQuerylistCategoriesauth0FunctionAppSyncFunction5854EFCA",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "QuerylistTodospostAuth0FunctionQuerylistTodospostAuth0FunctionAppSyncFunction154D8577",
+        "QuerylistCategoriespostAuth0FunctionQuerylistCategoriespostAuth0FunctionAppSyncFunction3B411DD0",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "QueryListTodosDataResolverFnQueryListTodosDataResolverFnAppSyncFunctionF825FE47",
+        "QueryListCategoriesDataResolverFnQueryListCategoriesDataResolverFnAppSyncFunctionA98A6BC1",
         "FunctionId"
        ]
       }
@@ -923,7 +889,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"listTodos\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Query\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"listCategories\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -942,7 +908,7 @@
                ":",
                {
                 "Fn::GetAtt": [
-                 "TodoTable",
+                 "CategoryTable",
                  "TableArn"
                 ]
                }
@@ -992,10 +958,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/queryListTodosResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/queryListCategoriesResolver"
    }
   },
-  "MutationcreateTodoinit0FunctionMutationcreateTodoinit0FunctionAppSyncFunction54DE5B8B": {
+  "MutationcreateCategoryinit0FunctionMutationcreateCategoryinit0FunctionAppSyncFunction2F62B0C9": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1005,7 +971,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationcreateTodoinit0Function",
+    "Name": "MutationcreateCategoryinit0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a183ddccbd956316c38ef97177b8f088ef0826f62023323f5ae6053d348ccffc.vtl"
     },
@@ -1014,10 +980,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationcreateTodoinit0Function/MutationcreateTodoinit0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationcreateCategoryinit0Function/MutationcreateCategoryinit0Function.AppSyncFunction"
    }
   },
-  "MutationcreateTodoinit1FunctionMutationcreateTodoinit1FunctionAppSyncFunctionC88B2238": {
+  "MutationcreateCategoryauth0FunctionMutationcreateCategoryauth0FunctionAppSyncFunctionADBDFC31": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1027,29 +993,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationcreateTodoinit1Function",
-    "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/5c26058f1d0ebbda593ea24750dbc39df780a8df053d216af467b46410648b01.vtl"
-    },
-    "ResponseMappingTemplate": "$util.toJson({})"
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationcreateTodoinit1Function/MutationcreateTodoinit1Function.AppSyncFunction"
-   }
-  },
-  "MutationcreateTodoauth0FunctionMutationcreateTodoauth0FunctionAppSyncFunction21817E36": {
-   "Type": "AWS::AppSync::FunctionConfiguration",
-   "Properties": {
-    "ApiId": {
-     "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
-    },
-    "DataSourceName": {
-     "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
-    },
-    "FunctionVersion": "2018-05-29",
-    "Name": "MutationcreateTodoauth0Function",
+    "Name": "MutationcreateCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/d637c1fb7301003b8a5ada269338cf2e8df6cc0dc412ef13acc6158d680b6d3e.vtl"
     },
@@ -1058,10 +1002,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationcreateTodoauth0Function/MutationcreateTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationcreateCategoryauth0Function/MutationcreateCategoryauth0Function.AppSyncFunction"
    }
   },
-  "MutationcreateTodopostAuth0FunctionMutationcreateTodopostAuth0FunctionAppSyncFunctionED59EB9F": {
+  "MutationcreateCategorypostAuth0FunctionMutationcreateCategorypostAuth0FunctionAppSyncFunction8FE85DCD": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1071,7 +1015,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationcreateTodopostAuth0Function",
+    "Name": "MutationcreateCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1080,10 +1024,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationcreateTodopostAuth0Function/MutationcreateTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationcreateCategorypostAuth0Function/MutationcreateCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "MutationCreateTodoDataResolverFnMutationCreateTodoDataResolverFnAppSyncFunction900EC5CF": {
+  "MutationCreateCategoryDataResolverFnMutationCreateCategoryDataResolverFnAppSyncFunction88A74168": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1091,65 +1035,59 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationCreateTodoDataResolverFn",
+    "Name": "MutationCreateCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
-     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2bf64327ca5682da4be84d0d16440204e25abc3a221195b41f2d21dfa432e5ab.vtl"
+     "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2bd7a17ac26a9db2f6e390d98cb1099bf8ac470b9a8996e36636ab5910b3e098.vtl"
     },
     "ResponseMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/f4a52b72209a9dfa197b5e7367a5c378c5bb86de6e29ddd9e48b49a3fe54b249.vtl"
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationCreateTodoDataResolverFn/MutationCreateTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationCreateCategoryDataResolverFn/MutationCreateCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "CreateTodoResolver": {
+  "CreateCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "createTodo",
+    "FieldName": "createCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "MutationcreateTodoinit0FunctionMutationcreateTodoinit0FunctionAppSyncFunction54DE5B8B",
+        "MutationcreateCategoryinit0FunctionMutationcreateCategoryinit0FunctionAppSyncFunction2F62B0C9",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationcreateTodoinit1FunctionMutationcreateTodoinit1FunctionAppSyncFunctionC88B2238",
+        "MutationcreateCategoryauth0FunctionMutationcreateCategoryauth0FunctionAppSyncFunctionADBDFC31",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationcreateTodoauth0FunctionMutationcreateTodoauth0FunctionAppSyncFunction21817E36",
+        "MutationcreateCategorypostAuth0FunctionMutationcreateCategorypostAuth0FunctionAppSyncFunction8FE85DCD",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationcreateTodopostAuth0FunctionMutationcreateTodopostAuth0FunctionAppSyncFunctionED59EB9F",
-        "FunctionId"
-       ]
-      },
-      {
-       "Fn::GetAtt": [
-        "MutationCreateTodoDataResolverFnMutationCreateTodoDataResolverFnAppSyncFunction900EC5CF",
+        "MutationCreateCategoryDataResolverFnMutationCreateCategoryDataResolverFnAppSyncFunction88A74168",
         "FunctionId"
        ]
       }
@@ -1159,7 +1097,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"createTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"createCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -1178,7 +1116,7 @@
                ":",
                {
                 "Fn::GetAtt": [
-                 "TodoTable",
+                 "CategoryTable",
                  "TableArn"
                 ]
                }
@@ -1228,10 +1166,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/mutationCreateTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/mutationCreateCategoryResolver"
    }
   },
-  "MutationupdateTodoinit0FunctionMutationupdateTodoinit0FunctionAppSyncFunction1B95BB19": {
+  "MutationupdateCategoryinit0FunctionMutationupdateCategoryinit0FunctionAppSyncFunction6F02F297": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1241,7 +1179,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationupdateTodoinit0Function",
+    "Name": "MutationupdateCategoryinit0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/06db846fd14e6fc371f22b12b5545ba8e2dbfeda85d8c8d586c71c282166657b.vtl"
     },
@@ -1250,10 +1188,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationupdateTodoinit0Function/MutationupdateTodoinit0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationupdateCategoryinit0Function/MutationupdateCategoryinit0Function.AppSyncFunction"
    }
   },
-  "MutationupdateTodoauth0FunctionMutationupdateTodoauth0FunctionAppSyncFunction1E4A3112": {
+  "MutationupdateCategoryauth0FunctionMutationupdateCategoryauth0FunctionAppSyncFunction89B37FA2": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1261,12 +1199,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationupdateTodoauth0Function",
+    "Name": "MutationupdateCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
     },
@@ -1275,15 +1213,15 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationupdateTodoauth0Function/MutationupdateTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationupdateCategoryauth0Function/MutationupdateCategoryauth0Function.AppSyncFunction"
    }
   },
-  "MutationupdateTodopostAuth0FunctionMutationupdateTodopostAuth0FunctionAppSyncFunction50C507D7": {
+  "MutationupdateCategorypostAuth0FunctionMutationupdateCategorypostAuth0FunctionAppSyncFunction7294B392": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1293,7 +1231,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationupdateTodopostAuth0Function",
+    "Name": "MutationupdateCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1302,10 +1240,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationupdateTodopostAuth0Function/MutationupdateTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationupdateCategorypostAuth0Function/MutationupdateCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "MutationUpdateTodoDataResolverFnMutationUpdateTodoDataResolverFnAppSyncFunctionBC238C49": {
+  "MutationUpdateCategoryDataResolverFnMutationUpdateCategoryDataResolverFnAppSyncFunctionC24BA823": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1313,12 +1251,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationUpdateTodoDataResolverFn",
+    "Name": "MutationUpdateCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/474bf0776ec2164a13191d1a0a9e057154931e4918fea5086f49850d02a5371b.vtl"
     },
@@ -1327,45 +1265,45 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationUpdateTodoDataResolverFn/MutationUpdateTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationUpdateCategoryDataResolverFn/MutationUpdateCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "UpdateTodoResolver": {
+  "UpdateCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "updateTodo",
+    "FieldName": "updateCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "MutationupdateTodoinit0FunctionMutationupdateTodoinit0FunctionAppSyncFunction1B95BB19",
+        "MutationupdateCategoryinit0FunctionMutationupdateCategoryinit0FunctionAppSyncFunction6F02F297",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationupdateTodoauth0FunctionMutationupdateTodoauth0FunctionAppSyncFunction1E4A3112",
+        "MutationupdateCategoryauth0FunctionMutationupdateCategoryauth0FunctionAppSyncFunction89B37FA2",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationupdateTodopostAuth0FunctionMutationupdateTodopostAuth0FunctionAppSyncFunction50C507D7",
+        "MutationupdateCategorypostAuth0FunctionMutationupdateCategorypostAuth0FunctionAppSyncFunction7294B392",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationUpdateTodoDataResolverFnMutationUpdateTodoDataResolverFnAppSyncFunctionBC238C49",
+        "MutationUpdateCategoryDataResolverFnMutationUpdateCategoryDataResolverFnAppSyncFunctionC24BA823",
         "FunctionId"
        ]
       }
@@ -1375,7 +1313,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"updateTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"updateCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -1394,7 +1332,7 @@
                ":",
                {
                 "Fn::GetAtt": [
-                 "TodoTable",
+                 "CategoryTable",
                  "TableArn"
                 ]
                }
@@ -1444,10 +1382,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/mutationUpdateTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/mutationUpdateCategoryResolver"
    }
   },
-  "MutationdeleteTodoauth0FunctionMutationdeleteTodoauth0FunctionAppSyncFunctionC82C218C": {
+  "MutationdeleteCategoryauth0FunctionMutationdeleteCategoryauth0FunctionAppSyncFunction8A0D27C9": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1455,12 +1393,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationdeleteTodoauth0Function",
+    "Name": "MutationdeleteCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1f5fed297da9c32ae3af922bf3a38ccf23b956078887d16891ec06c20c64722c.vtl"
     },
@@ -1469,15 +1407,15 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationdeleteTodoauth0Function/MutationdeleteTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationdeleteCategoryauth0Function/MutationdeleteCategoryauth0Function.AppSyncFunction"
    }
   },
-  "MutationdeleteTodopostAuth0FunctionMutationdeleteTodopostAuth0FunctionAppSyncFunction483271A2": {
+  "MutationdeleteCategorypostAuth0FunctionMutationdeleteCategorypostAuth0FunctionAppSyncFunctionC3AE835D": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1487,7 +1425,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationdeleteTodopostAuth0Function",
+    "Name": "MutationdeleteCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1496,10 +1434,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationdeleteTodopostAuth0Function/MutationdeleteTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationdeleteCategorypostAuth0Function/MutationdeleteCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "MutationDeleteTodoDataResolverFnMutationDeleteTodoDataResolverFnAppSyncFunction3879153F": {
+  "MutationDeleteCategoryDataResolverFnMutationDeleteCategoryDataResolverFnAppSyncFunctionB44DFDF2": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1507,12 +1445,12 @@
     },
     "DataSourceName": {
      "Fn::GetAtt": [
-      "TodoDataSource",
+      "CategoryDataSource",
       "Name"
      ]
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "MutationDeleteTodoDataResolverFn",
+    "Name": "MutationDeleteCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4f7907d1209a2c9953a0c053df402c634e359546d70c7cc5c2e8e21ea734880f.vtl"
     },
@@ -1521,39 +1459,39 @@
     }
    },
    "DependsOn": [
-    "TodoDataSource"
+    "CategoryDataSource"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/MutationDeleteTodoDataResolverFn/MutationDeleteTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/MutationDeleteCategoryDataResolverFn/MutationDeleteCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "DeleteTodoResolver": {
+  "DeleteCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "deleteTodo",
+    "FieldName": "deleteCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "MutationdeleteTodoauth0FunctionMutationdeleteTodoauth0FunctionAppSyncFunctionC82C218C",
+        "MutationdeleteCategoryauth0FunctionMutationdeleteCategoryauth0FunctionAppSyncFunction8A0D27C9",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationdeleteTodopostAuth0FunctionMutationdeleteTodopostAuth0FunctionAppSyncFunction483271A2",
+        "MutationdeleteCategorypostAuth0FunctionMutationdeleteCategorypostAuth0FunctionAppSyncFunctionC3AE835D",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "MutationDeleteTodoDataResolverFnMutationDeleteTodoDataResolverFnAppSyncFunction3879153F",
+        "MutationDeleteCategoryDataResolverFnMutationDeleteCategoryDataResolverFnAppSyncFunctionB44DFDF2",
         "FunctionId"
        ]
       }
@@ -1563,7 +1501,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"deleteTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Mutation\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"deleteCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"AMAZON_DYNAMODB\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -1582,7 +1520,7 @@
                ":",
                {
                 "Fn::GetAtt": [
-                 "TodoTable",
+                 "CategoryTable",
                  "TableArn"
                 ]
                }
@@ -1632,10 +1570,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/mutationDeleteTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/mutationDeleteCategoryResolver"
    }
   },
-  "SubscriptiononCreateTodoauth0FunctionSubscriptiononCreateTodoauth0FunctionAppSyncFunction042EF9E1": {
+  "SubscriptiononCreateCategoryauth0FunctionSubscriptiononCreateCategoryauth0FunctionAppSyncFunction15E4A3EF": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1645,7 +1583,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononCreateTodoauth0Function",
+    "Name": "SubscriptiononCreateCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e6da5a6e993df8b5fdc91086b71eb53e72a3a97c98836ef9c9257776f36c452b.vtl"
     },
@@ -1654,10 +1592,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononCreateTodoauth0Function/SubscriptiononCreateTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononCreateCategoryauth0Function/SubscriptiononCreateCategoryauth0Function.AppSyncFunction"
    }
   },
-  "SubscriptiononCreateTodopostAuth0FunctionSubscriptiononCreateTodopostAuth0FunctionAppSyncFunction18E34C4E": {
+  "SubscriptiononCreateCategorypostAuth0FunctionSubscriptiononCreateCategorypostAuth0FunctionAppSyncFunction9E3EA25C": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1667,7 +1605,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononCreateTodopostAuth0Function",
+    "Name": "SubscriptiononCreateCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1676,10 +1614,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononCreateTodopostAuth0Function/SubscriptiononCreateTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononCreateCategorypostAuth0Function/SubscriptiononCreateCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "SubscriptionOnCreateTodoDataResolverFnSubscriptionOnCreateTodoDataResolverFnAppSyncFunction462A70C9": {
+  "SubscriptionOnCreateCategoryDataResolverFnSubscriptionOnCreateCategoryDataResolverFnAppSyncFunction06759B82": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1689,7 +1627,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptionOnCreateTodoDataResolverFn",
+    "Name": "SubscriptionOnCreateCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
     },
@@ -1700,34 +1638,34 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptionOnCreateTodoDataResolverFn/SubscriptionOnCreateTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptionOnCreateCategoryDataResolverFn/SubscriptionOnCreateCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "SubscriptiononCreateTodoResolver": {
+  "SubscriptiononCreateCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "onCreateTodo",
+    "FieldName": "onCreateCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "SubscriptiononCreateTodoauth0FunctionSubscriptiononCreateTodoauth0FunctionAppSyncFunction042EF9E1",
+        "SubscriptiononCreateCategoryauth0FunctionSubscriptiononCreateCategoryauth0FunctionAppSyncFunction15E4A3EF",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptiononCreateTodopostAuth0FunctionSubscriptiononCreateTodopostAuth0FunctionAppSyncFunction18E34C4E",
+        "SubscriptiononCreateCategorypostAuth0FunctionSubscriptiononCreateCategorypostAuth0FunctionAppSyncFunction9E3EA25C",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptionOnCreateTodoDataResolverFnSubscriptionOnCreateTodoDataResolverFnAppSyncFunction462A70C9",
+        "SubscriptionOnCreateCategoryDataResolverFnSubscriptionOnCreateCategoryDataResolverFnAppSyncFunction06759B82",
         "FunctionId"
        ]
       }
@@ -1737,7 +1675,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onCreateTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onCreateCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -1779,10 +1717,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/subscriptionOnCreateTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/subscriptionOnCreateCategoryResolver"
    }
   },
-  "SubscriptiononUpdateTodoauth0FunctionSubscriptiononUpdateTodoauth0FunctionAppSyncFunction80D0DFA3": {
+  "SubscriptiononUpdateCategoryauth0FunctionSubscriptiononUpdateCategoryauth0FunctionAppSyncFunction836BB3AE": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1792,7 +1730,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononUpdateTodoauth0Function",
+    "Name": "SubscriptiononUpdateCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e6da5a6e993df8b5fdc91086b71eb53e72a3a97c98836ef9c9257776f36c452b.vtl"
     },
@@ -1801,10 +1739,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononUpdateTodoauth0Function/SubscriptiononUpdateTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononUpdateCategoryauth0Function/SubscriptiononUpdateCategoryauth0Function.AppSyncFunction"
    }
   },
-  "SubscriptiononUpdateTodopostAuth0FunctionSubscriptiononUpdateTodopostAuth0FunctionAppSyncFunction04445BC7": {
+  "SubscriptiononUpdateCategorypostAuth0FunctionSubscriptiononUpdateCategorypostAuth0FunctionAppSyncFunction313D1497": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1814,7 +1752,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononUpdateTodopostAuth0Function",
+    "Name": "SubscriptiononUpdateCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1823,10 +1761,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononUpdateTodopostAuth0Function/SubscriptiononUpdateTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononUpdateCategorypostAuth0Function/SubscriptiononUpdateCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "SubscriptionOnUpdateTodoDataResolverFnSubscriptionOnUpdateTodoDataResolverFnAppSyncFunction523DF0E4": {
+  "SubscriptionOnUpdateCategoryDataResolverFnSubscriptionOnUpdateCategoryDataResolverFnAppSyncFunctionD8B573A8": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1836,7 +1774,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptionOnUpdateTodoDataResolverFn",
+    "Name": "SubscriptionOnUpdateCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
     },
@@ -1847,34 +1785,34 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptionOnUpdateTodoDataResolverFn/SubscriptionOnUpdateTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptionOnUpdateCategoryDataResolverFn/SubscriptionOnUpdateCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "SubscriptiononUpdateTodoResolver": {
+  "SubscriptiononUpdateCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "onUpdateTodo",
+    "FieldName": "onUpdateCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "SubscriptiononUpdateTodoauth0FunctionSubscriptiononUpdateTodoauth0FunctionAppSyncFunction80D0DFA3",
+        "SubscriptiononUpdateCategoryauth0FunctionSubscriptiononUpdateCategoryauth0FunctionAppSyncFunction836BB3AE",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptiononUpdateTodopostAuth0FunctionSubscriptiononUpdateTodopostAuth0FunctionAppSyncFunction04445BC7",
+        "SubscriptiononUpdateCategorypostAuth0FunctionSubscriptiononUpdateCategorypostAuth0FunctionAppSyncFunction313D1497",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptionOnUpdateTodoDataResolverFnSubscriptionOnUpdateTodoDataResolverFnAppSyncFunction523DF0E4",
+        "SubscriptionOnUpdateCategoryDataResolverFnSubscriptionOnUpdateCategoryDataResolverFnAppSyncFunctionD8B573A8",
         "FunctionId"
        ]
       }
@@ -1884,7 +1822,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onUpdateTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onUpdateCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -1926,10 +1864,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/subscriptionOnUpdateTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/subscriptionOnUpdateCategoryResolver"
    }
   },
-  "SubscriptiononDeleteTodoauth0FunctionSubscriptiononDeleteTodoauth0FunctionAppSyncFunctionF69F2220": {
+  "SubscriptiononDeleteCategoryauth0FunctionSubscriptiononDeleteCategoryauth0FunctionAppSyncFunction9DE1F320": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1939,7 +1877,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononDeleteTodoauth0Function",
+    "Name": "SubscriptiononDeleteCategoryauth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/e6da5a6e993df8b5fdc91086b71eb53e72a3a97c98836ef9c9257776f36c452b.vtl"
     },
@@ -1948,10 +1886,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononDeleteTodoauth0Function/SubscriptiononDeleteTodoauth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononDeleteCategoryauth0Function/SubscriptiononDeleteCategoryauth0Function.AppSyncFunction"
    }
   },
-  "SubscriptiononDeleteTodopostAuth0FunctionSubscriptiononDeleteTodopostAuth0FunctionAppSyncFunctionE131CBE7": {
+  "SubscriptiononDeleteCategorypostAuth0FunctionSubscriptiononDeleteCategorypostAuth0FunctionAppSyncFunction3854A641": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1961,7 +1899,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptiononDeleteTodopostAuth0Function",
+    "Name": "SubscriptiononDeleteCategorypostAuth0Function",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/c1721bcd774e27c514d3454b5be4f9bdd094c0161b57ddf053d618e3b0086a77.vtl"
     },
@@ -1970,10 +1908,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptiononDeleteTodopostAuth0Function/SubscriptiononDeleteTodopostAuth0Function.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptiononDeleteCategorypostAuth0Function/SubscriptiononDeleteCategorypostAuth0Function.AppSyncFunction"
    }
   },
-  "SubscriptionOnDeleteTodoDataResolverFnSubscriptionOnDeleteTodoDataResolverFnAppSyncFunction3E641E8C": {
+  "SubscriptionOnDeleteCategoryDataResolverFnSubscriptionOnDeleteCategoryDataResolverFnAppSyncFunction3EAC245C": {
    "Type": "AWS::AppSync::FunctionConfiguration",
    "Properties": {
     "ApiId": {
@@ -1983,7 +1921,7 @@
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPINONEDS69C1D503Name"
     },
     "FunctionVersion": "2018-05-29",
-    "Name": "SubscriptionOnDeleteTodoDataResolverFn",
+    "Name": "SubscriptionOnDeleteCategoryDataResolverFn",
     "RequestMappingTemplateS3Location": {
      "Fn::Sub": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/fe3c43ada4b9d681a5e2312663ef7a73386424d73b73e51f8e2e9d4b50f7c502.vtl"
     },
@@ -1994,34 +1932,34 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/SubscriptionOnDeleteTodoDataResolverFn/SubscriptionOnDeleteTodoDataResolverFn.AppSyncFunction"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/SubscriptionOnDeleteCategoryDataResolverFn/SubscriptionOnDeleteCategoryDataResolverFn.AppSyncFunction"
    }
   },
-  "SubscriptiononDeleteTodoResolver": {
+  "SubscriptiononDeleteCategoryResolver": {
    "Type": "AWS::AppSync::Resolver",
    "Properties": {
     "ApiId": {
      "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
     },
-    "FieldName": "onDeleteTodo",
+    "FieldName": "onDeleteCategory",
     "Kind": "PIPELINE",
     "PipelineConfig": {
      "Functions": [
       {
        "Fn::GetAtt": [
-        "SubscriptiononDeleteTodoauth0FunctionSubscriptiononDeleteTodoauth0FunctionAppSyncFunctionF69F2220",
+        "SubscriptiononDeleteCategoryauth0FunctionSubscriptiononDeleteCategoryauth0FunctionAppSyncFunction9DE1F320",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptiononDeleteTodopostAuth0FunctionSubscriptiononDeleteTodopostAuth0FunctionAppSyncFunctionE131CBE7",
+        "SubscriptiononDeleteCategorypostAuth0FunctionSubscriptiononDeleteCategorypostAuth0FunctionAppSyncFunction3854A641",
         "FunctionId"
        ]
       },
       {
        "Fn::GetAtt": [
-        "SubscriptionOnDeleteTodoDataResolverFnSubscriptionOnDeleteTodoDataResolverFnAppSyncFunction3E641E8C",
+        "SubscriptionOnDeleteCategoryDataResolverFnSubscriptionOnDeleteCategoryDataResolverFnAppSyncFunction3EAC245C",
         "FunctionId"
        ]
       }
@@ -2031,7 +1969,7 @@
      "Fn::Join": [
       "",
       [
-       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onDeleteTodo\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
+       "$util.qr($ctx.stash.put(\"typeName\", \"Subscription\"))\n$util.qr($ctx.stash.put(\"fieldName\", \"onDeleteCategory\"))\n$util.qr($ctx.stash.put(\"conditions\", []))\n$util.qr($ctx.stash.put(\"metadata\", {}))\n$util.qr($ctx.stash.metadata.put(\"dataSourceType\", \"NONE\"))\n$util.qr($ctx.stash.metadata.put(\"apiId\", \"",
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
@@ -2073,7 +2011,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/subscriptionOnDeleteTodoResolver"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/subscriptionOnDeleteCategoryResolver"
    }
   },
   "CDKMetadata": {
@@ -2082,17 +2020,17 @@
     "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQQW+DMAyFf8vuqdfRy64raMdtgt0rkxiUAg6KnVYV4r9PoVOnnZ6f3pP9yQUU+1fYP+FVdtYNu9G3sHyQKLlG0Q6m7PgLI06kFLMpAzuvPrCpSUKKlkyZRMP0Zzt+zHiV0+JujFNwLXxjO9IRhYzHCZY6jPd2GGk1OM9yYwtLtdWrtkLF5rHyv3tPbDNEGbjzfYq4Ef1eHi8UVyOHE4qQCrxlMXKAY7IDaQZYc/cz6ZzUbHGj2HvuV8PBEZzl+VIU8JI/cxbvdzGx+omgvusPQENnNDYBAAA="
    },
    "Metadata": {
-    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Todo/CDKMetadata/Default"
+    "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/data/amplifyData/Category/CDKMetadata/Default"
    },
    "Condition": "CDKMetadataAvailable"
   }
  },
  "Outputs": {
-  "GetAttTodoTableStreamArn": {
+  "GetAttCategoryTableStreamArn": {
    "Description": "Your DynamoDB table StreamArn.",
    "Value": {
     "Fn::GetAtt": [
-     "TodoTable",
+     "CategoryTable",
      "TableStreamArn"
     ]
    },
@@ -2104,19 +2042,19 @@
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
-       "GetAtt:TodoTable:StreamArn"
+       "GetAtt:CategoryTable:StreamArn"
       ]
      ]
     }
    }
   },
-  "GetAttTodoTableName": {
+  "GetAttCategoryTableName": {
    "Description": "Your DynamoDB table name.",
    "Value": {
     "Fn::Join": [
      "",
      [
-      "Todo-",
+      "Category-",
       {
        "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
       },
@@ -2132,24 +2070,24 @@
        {
         "Ref": "referencetoamplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataGraphQLAPIEB2419B4ApiId"
        },
-       "GetAtt:TodoTable:Name"
+       "GetAtt:CategoryTable:Name"
       ]
      ]
     }
    }
   },
-  "amplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataTodoTodoDataSource35C9E7C5Name": {
+  "amplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataCategoryCategoryDataSourceBDE8F2C5Name": {
    "Value": {
     "Fn::GetAtt": [
-     "TodoDataSource",
+     "CategoryDataSource",
      "Name"
     ]
    }
   },
-  "amplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataTodoTodoTable01AFA63CTableArn": {
+  "amplifyjsyfirstamplifyappjsysandbox550545325adataamplifyDataCategoryCategoryTableD16E05F4TableArn": {
    "Value": {
     "Fn::GetAtt": [
-     "TodoTable",
+     "CategoryTable",
      "TableArn"
     ]
    }

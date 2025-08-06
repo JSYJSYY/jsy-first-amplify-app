@@ -26,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function loadData() {
     try {
@@ -60,7 +60,9 @@ export default function Home() {
       const createdCategories = await Promise.all(
         defaultCategories.map(cat => client.models.Category.create(cat))
       );
-      const newCategories = createdCategories.map(result => result.data).filter(Boolean);
+      const newCategories = createdCategories
+        .map(result => result.data)
+        .filter((cat): cat is NonNullable<typeof cat> => cat !== null);
       setCategories(newCategories);
     } catch (error) {
       console.error('Error creating default categories:', error);
@@ -168,7 +170,7 @@ export default function Home() {
 
   // Filter todos based on current view and category
   function getFilteredTodos() {
-    let filtered = todos.filter(todo => {
+    const filtered = todos.filter(todo => {
       // Apply category filter
       if (selectedCategoryId && todo.categoryId !== selectedCategoryId) {
         return false;

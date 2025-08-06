@@ -10,6 +10,7 @@ const client = generateClient<Schema>();
 export default function Home() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [newTodo, setNewTodo] = useState('');
+  const [showArchived, setShowArchived] = useState(false);
 
   useEffect(() => {
     listTodos();
@@ -31,6 +32,7 @@ export default function Home() {
       const { data: newTodoItem } = await client.models.Todo.create({
         content: newTodo,
         done: false,
+        archived: false,
       });
       if (newTodoItem) {
         setTodos([...todos, newTodoItem]);
@@ -54,6 +56,38 @@ export default function Home() {
       console.error('Error updating todo:', error);
     }
   }
+
+  async function archiveTodo(id: string) {
+    try {
+      const { data: updatedTodo } = await client.models.Todo.update({
+        id,
+        archived: true,
+      });
+      if (updatedTodo) {
+        setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
+      }
+    } catch (error) {
+      console.error('Error archiving todo:', error);
+    }
+  }
+
+  async function unarchiveTodo(id: string) {
+    try {
+      const { data: updatedTodo } = await client.models.Todo.update({
+        id,
+        archived: false,
+      });
+      if (updatedTodo) {
+        setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
+      }
+    } catch (error) {
+      console.error('Error unarchiving todo:', error);
+    }
+  }
+
+  // Filter todos based on archived status
+  const activeTodos = todos.filter(todo => !todo.archived);
+  const archivedTodos = todos.filter(todo => todo.archived);
   return (
     <div className="font-sans min-h-screen p-8">
       <main className="max-w-2xl mx-auto">
@@ -83,38 +117,84 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="mb-6">
+          <div className="flex gap-4 mb-4">
+            <button
+              onClick={() => setShowArchived(false)}
+              className={`px-4 py-2 rounded-md ${
+                !showArchived
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Active ({activeTodos.length})
+            </button>
+            <button
+              onClick={() => setShowArchived(true)}
+              className={`px-4 py-2 rounded-md ${
+                showArchived
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Archived ({archivedTodos.length})
+            </button>
+          </div>
+        </div>
+
         <div className="space-y-2">
-          {todos.map((todo) => (
+          {(showArchived ? archivedTodos : activeTodos).map((todo) => (
             <div
               key={todo.id}
               className="flex items-center gap-3 p-3 border border-gray-200 rounded-md"
             >
-              <input
-                type="checkbox"
-                checked={todo.done || false}
-                onChange={() => toggleTodo(todo.id, todo.done || false)}
-                className="w-4 h-4 text-blue-600"
-              />
+              {!showArchived && (
+                <input
+                  type="checkbox"
+                  checked={todo.done || false}
+                  onChange={() => toggleTodo(todo.id, todo.done || false)}
+                  className="w-4 h-4 text-blue-600"
+                />
+              )}
               <span
                 className={`flex-1 ${
                   todo.done ? 'line-through text-gray-500' : ''
-                }`}
+                } ${showArchived ? 'text-gray-600' : ''}`}
               >
                 {todo.content}
               </span>
+              {!showArchived ? (
+                <button
+                  onClick={() => archiveTodo(todo.id)}
+                  className="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600"
+                >
+                  Archive
+                </button>
+              ) : (
+                <button
+                  onClick={() => unarchiveTodo(todo.id)}
+                  className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  Restore
+                </button>
+              )}
             </div>
           ))}
         </div>
 
-        {todos.length === 0 && (
+        {!showArchived && activeTodos.length === 0 && (
           <div className="text-center py-8 text-gray-500">
-            No todos yet. Add one above to get started!
+            No active todos yet. Add one above to get started!
           </div>
         )}
 
-        <div className="mt-12 text-center text-sm text-gray-500">
-          <p>Built with AWS Amplify Gen2 + Next.js + TypeScript</p>
-        </div>
+        {showArchived && archivedTodos.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No archived todos yet. Complete some tasks and archive them!
+          </div>
+        )}
+
+        
       </main>
     </div>
   );

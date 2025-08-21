@@ -22,8 +22,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     checkAuth();
-    fetchEvents();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchEvents();
+    }
+  }, [selectedCity, user]);
 
   const checkAuth = async () => {
     try {
@@ -38,7 +43,20 @@ export default function Dashboard() {
 
   const fetchEvents = async () => {
     try {
-      // Call our Lambda function to fetch EDM events
+      // First try the API route (which uses EDMTrain)
+      const response = await fetch(`/api/events?city=${selectedCity}&state=CA`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setEvents(data.events || []);
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching from API:', error);
+    }
+    
+    // Fallback to Lambda function
+    try {
       const result = await client.mutations.fetchEDMEvents({
         city: selectedCity,
         state: 'CA',
@@ -193,6 +211,11 @@ export default function Dashboard() {
                 <option value="New York">New York</option>
                 <option value="Miami">Miami</option>
                 <option value="Chicago">Chicago</option>
+                <option value="Las Vegas">Las Vegas</option>
+                <option value="Denver">Denver</option>
+                <option value="Seattle">Seattle</option>
+                <option value="Austin">Austin</option>
+                <option value="Detroit">Detroit</option>
               </select>
             </div>
 

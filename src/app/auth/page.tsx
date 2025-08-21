@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn, signUp, confirmSignUp } from 'aws-amplify/auth';
+import { useState, useEffect } from 'react';
+import { signIn, signUp, confirmSignUp, getCurrentUser } from 'aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
@@ -19,22 +19,46 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Check if user is already signed in
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      await getCurrentUser();
+      // User is already signed in, redirect to dashboard
+      router.push('/dashboard');
+    } catch {
+      // User is not signed in, stay on auth page
+    }
+  };
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const { isSignedIn } = await signIn({
+      const { isSignedIn, nextStep } = await signIn({
         username: email,
         password,
       });
 
       if (isSignedIn) {
         router.push('/dashboard');
+      } else if (nextStep) {
+        // Handle other steps if needed
+        console.log('Next step:', nextStep);
+        router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in');
+      // If user is already signed in, redirect to dashboard
+      if (err.message?.includes('already') || err.message?.includes('signed')) {
+        router.push('/dashboard');
+      } else {
+        setError(err.message || 'Failed to sign in');
+      }
     } finally {
       setLoading(false);
     }

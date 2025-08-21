@@ -170,11 +170,10 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "f8beb10b5cc2b0c15fab9b7167bad71243910c6104bb68031687f28af0b2dd3c.zip"
+     "S3Key": "f7d802337ff6c638c796992f2b449f190315f56d8d536abc95ca5c3cee733f3c.zip"
     },
     "Environment": {
      "Variables": {
-      "EDMTRAIN_API_KEY": "",
       "AMPLIFY_SSM_ENV_CONFIG": "{}"
      }
     },
@@ -213,7 +212,7 @@
    "DeletionPolicy": "Delete",
    "Metadata": {
     "aws:cdk:path": "amplify-jsyfirstamplifyapp-jsy-sandbox-550545325a/function/fetchEDMEvents-lambda/Resource",
-    "aws:asset:path": "asset.f8beb10b5cc2b0c15fab9b7167bad71243910c6104bb68031687f28af0b2dd3c",
+    "aws:asset:path": "asset.f7d802337ff6c638c796992f2b449f190315f56d8d536abc95ca5c3cee733f3c",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

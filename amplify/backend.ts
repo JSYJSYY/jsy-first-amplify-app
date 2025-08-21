@@ -16,3 +16,9 @@ export const backend = defineBackend({
   getUpcomingEvents,
   getUserRecommendations,
 });
+
+// Add EDMTrain API key to fetchEDMEvents Lambda
+backend.fetchEDMEvents.resources.lambda.environment = {
+  ...backend.fetchEDMEvents.resources.lambda.environment,
+  EDMTRAIN_API_KEY: process.env.EDMTRAIN_API_KEY || '932533d3-1d7b-49ef-8757-cd22cdae5d11',
+};

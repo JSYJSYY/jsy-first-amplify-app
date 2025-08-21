@@ -302,9 +302,24 @@ export default function Dashboard() {
                           <button className="px-4 py-2 cyber-border font-mono text-sm hover:bg-cyan-500/20 transition-all" style={{color: 'var(--cyber-cyan)'}}>
                             ADD TO WISHLIST
                           </button>
-                          <button className="px-4 py-2 cyber-border font-mono text-sm hover:bg-pink-500/20 transition-all" style={{color: 'var(--cyber-hot-pink)'}}>
-                            GET TICKETS
-                          </button>
+                          {event.ticketLink ? (
+                            <a 
+                              href={event.ticketLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 cyber-border font-mono text-sm hover:bg-pink-500/20 transition-all text-center block"
+                              style={{color: 'var(--cyber-hot-pink)'}}
+                            >
+                              GET TICKETS
+                            </a>
+                          ) : (
+                            <button 
+                              className="px-4 py-2 cyber-border font-mono text-sm hover:bg-pink-500/20 transition-all" 
+                              style={{color: 'var(--cyber-hot-pink)'}}
+                            >
+                              GET TICKETS
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -339,6 +354,23 @@ export default function Dashboard() {
           )}
         </main>
       </div>
+      
+      {/* Footer with EDMTrain attribution */}
+      <footer className="bg-black/80 backdrop-blur-sm cyber-border border-t p-4 text-center">
+        <p className="text-sm font-mono" style={{color: 'var(--cyber-cyan)'}}>
+          Event data powered by{' '}
+          <a 
+            href="https://edmtrain.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="underline hover:text-white transition-colors"
+            style={{color: 'var(--cyber-hot-pink)'}}
+          >
+            EDMTrain
+          </a>
+          {' '}• Built with 💜 by RavePulse
+        </p>
+      </footer>
     </div>
   );
 }

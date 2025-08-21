@@ -27,10 +27,9 @@ export const handler: Handler = async (event) => {
     params.append('startDate', startDate || today.toISOString().split('T')[0]);
     params.append('endDate', endDate || defaultEndDate.toISOString().split('T')[0]);
     
-    // Add API key if available
-    if (process.env.EDMTRAIN_API_KEY) {
-      params.append('client', process.env.EDMTRAIN_API_KEY);
-    }
+    // Add API key (required for EDMTrain API)
+    const apiKey = process.env.EDMTRAIN_API_KEY || '932533d3-1d7b-49ef-8757-cd22cdae5d11';
+    params.append('client', apiKey);
     
     // Fetch events from EDMTrain
     const response = await fetch(`${EDMTRAIN_API_BASE}?${params.toString()}`);

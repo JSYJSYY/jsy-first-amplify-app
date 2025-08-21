@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const EDMTRAIN_API_BASE = 'https://edmtrain.com/api/events';
-const EDMTRAIN_API_KEY = process.env.EDMTRAIN_API_KEY || 'your_api_key_here';
+const EDMTRAIN_API_KEY = process.env.EDMTRAIN_API_KEY || '932533d3-1d7b-49ef-8757-cd22cdae5d11';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;

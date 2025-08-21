@@ -1,0 +1,797 @@
+type UserProfile @aws_iam @aws_cognito_user_pools {
+  userId: String!
+  spotifyId: String
+  displayName: String
+  email: AWSEmail
+  imageUrl: String
+  spotifyRefreshToken: String
+  listeningData: AWSJSON
+  topArtists: AWSJSON
+  topGenres: AWSJSON
+  events(filter: ModelUserEventFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserEventConnection
+  recommendations(filter: ModelRecommendationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelRecommendationConnection
+  lastSync: AWSDateTime
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Event @aws_api_key @aws_iam @aws_cognito_user_pools {
+  eventId: String!
+  name: String!
+  date: AWSDate!
+  startTime: String
+  endTime: String
+  venue: AWSJSON!
+  artists: AWSJSON!
+  genres: AWSJSON
+  ages: String
+  festivalInd: Boolean
+  electronicGenreInd: Boolean
+  otherGenreInd: Boolean
+  link: String
+  ticketLink: String
+  imageUrl: String
+  city: String
+  state: String
+  latitude: Float
+  longitude: Float
+  userEvents(filter: ModelUserEventFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserEventConnection
+  recommendations(filter: ModelRecommendationFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelRecommendationConnection
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type UserEvent @aws_iam @aws_cognito_user_pools {
+  userId: String!
+  eventId: String!
+  status: UserEventStatus
+  notes: String
+  rating: Int
+  user: UserProfile
+  event: Event
+  addedAt: AWSDateTime
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Recommendation @aws_iam @aws_cognito_user_pools {
+  userId: String!
+  eventId: String!
+  matchScore: Float!
+  matchReasons: AWSJSON
+  user: UserProfile
+  event: Event
+  createdAt: AWSDateTime
+  id: ID!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Location @aws_api_key @aws_iam @aws_cognito_user_pools {
+  locationId: Int!
+  city: String!
+  state: String!
+  stateCode: String!
+  latitude: Float!
+  longitude: Float!
+  radius: Int
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum UserEventStatus {
+  wishlist
+  attended
+  skipped
+}
+
+type Mutation @aws_iam {
+  createUserProfile(input: CreateUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile @aws_iam @aws_cognito_user_pools
+  updateUserProfile(input: UpdateUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile @aws_iam @aws_cognito_user_pools
+  deleteUserProfile(input: DeleteUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile @aws_iam @aws_cognito_user_pools
+  createEvent(input: CreateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  updateEvent(input: UpdateEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  deleteEvent(input: DeleteEventInput!, condition: ModelEventConditionInput): Event @aws_api_key @aws_iam
+  createUserEvent(input: CreateUserEventInput!, condition: ModelUserEventConditionInput): UserEvent @aws_iam @aws_cognito_user_pools
+  updateUserEvent(input: UpdateUserEventInput!, condition: ModelUserEventConditionInput): UserEvent @aws_iam @aws_cognito_user_pools
+  deleteUserEvent(input: DeleteUserEventInput!, condition: ModelUserEventConditionInput): UserEvent @aws_iam @aws_cognito_user_pools
+  createRecommendation(input: CreateRecommendationInput!, condition: ModelRecommendationConditionInput): Recommendation @aws_iam @aws_cognito_user_pools
+  updateRecommendation(input: UpdateRecommendationInput!, condition: ModelRecommendationConditionInput): Recommendation @aws_iam @aws_cognito_user_pools
+  deleteRecommendation(input: DeleteRecommendationInput!, condition: ModelRecommendationConditionInput): Recommendation @aws_iam @aws_cognito_user_pools
+  createLocation(input: CreateLocationInput!, condition: ModelLocationConditionInput): Location @aws_api_key @aws_iam
+  updateLocation(input: UpdateLocationInput!, condition: ModelLocationConditionInput): Location @aws_api_key @aws_iam
+  deleteLocation(input: DeleteLocationInput!, condition: ModelLocationConditionInput): Location @aws_api_key @aws_iam
+  syncSpotifyData(accessToken: String!, refreshToken: String): UserProfile @aws_iam @aws_cognito_user_pools
+  fetchEDMEvents(city: String, state: String, latitude: Float, longitude: Float, startDate: AWSDate, endDate: AWSDate): AWSJSON @aws_iam @aws_api_key @aws_cognito_user_pools
+  generateRecommendations(userId: String!): AWSJSON @aws_iam @aws_cognito_user_pools
+}
+
+type Query @aws_iam {
+  getUserProfile(id: ID!): UserProfile @aws_iam @aws_cognito_user_pools
+  listUserProfiles(filter: ModelUserProfileFilterInput, limit: Int, nextToken: String): ModelUserProfileConnection @aws_iam @aws_cognito_user_pools
+  getEvent(id: ID!): Event @aws_api_key @aws_iam @aws_cognito_user_pools
+  listEvents(filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  listEventByCityAndDate(city: String!, date: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  listEventByStateAndDate(state: String!, date: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getUserEvent(id: ID!): UserEvent @aws_iam @aws_cognito_user_pools
+  listUserEvents(filter: ModelUserEventFilterInput, limit: Int, nextToken: String): ModelUserEventConnection @aws_iam @aws_cognito_user_pools
+  listUserEventByUserIdAndStatusAndAddedAt(userId: String!, statusAddedAt: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelUserEventFilterInput, limit: Int, nextToken: String): ModelUserEventConnection @aws_iam @aws_cognito_user_pools
+  getRecommendation(id: ID!): Recommendation @aws_iam @aws_cognito_user_pools
+  listRecommendations(filter: ModelRecommendationFilterInput, limit: Int, nextToken: String): ModelRecommendationConnection @aws_iam @aws_cognito_user_pools
+  listRecommendationByUserIdAndMatchScore(userId: String!, matchScore: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecommendationFilterInput, limit: Int, nextToken: String): ModelRecommendationConnection @aws_iam @aws_cognito_user_pools
+  getLocation(id: ID!): Location @aws_api_key @aws_iam @aws_cognito_user_pools
+  listLocations(filter: ModelLocationFilterInput, limit: Int, nextToken: String): ModelLocationConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  listLocationByCity(city: String!, sortDirection: ModelSortDirection, filter: ModelLocationFilterInput, limit: Int, nextToken: String): ModelLocationConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  listLocationByState(state: String!, sortDirection: ModelSortDirection, filter: ModelLocationFilterInput, limit: Int, nextToken: String): ModelLocationConnection @aws_api_key @aws_iam @aws_cognito_user_pools
+  getUpcomingEvents(city: String, state: String, limit: Int): AWSJSON @aws_iam @aws_api_key @aws_cognito_user_pools
+  getUserRecommendations(userId: String!, limit: Int): AWSJSON @aws_iam @aws_cognito_user_pools
+}
+
+input AmplifyAIConversationTurnErrorInput {
+  errorType: String!
+  message: String!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelUserProfileConnection @aws_iam @aws_cognito_user_pools {
+  items: [UserProfile]!
+  nextToken: String
+}
+
+input ModelUserProfileFilterInput {
+  userId: ModelStringInput
+  spotifyId: ModelStringInput
+  displayName: ModelStringInput
+  email: ModelStringInput
+  imageUrl: ModelStringInput
+  spotifyRefreshToken: ModelStringInput
+  listeningData: ModelStringInput
+  topArtists: ModelStringInput
+  topGenres: ModelStringInput
+  lastSync: ModelStringInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelUserProfileFilterInput]
+  or: [ModelUserProfileFilterInput]
+  not: ModelUserProfileFilterInput
+  owner: ModelStringInput
+}
+
+input ModelUserProfileConditionInput {
+  userId: ModelStringInput
+  spotifyId: ModelStringInput
+  displayName: ModelStringInput
+  email: ModelStringInput
+  imageUrl: ModelStringInput
+  spotifyRefreshToken: ModelStringInput
+  listeningData: ModelStringInput
+  topArtists: ModelStringInput
+  topGenres: ModelStringInput
+  lastSync: ModelStringInput
+  and: [ModelUserProfileConditionInput]
+  or: [ModelUserProfileConditionInput]
+  not: ModelUserProfileConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  owner: ModelStringInput
+}
+
+input CreateUserProfileInput {
+  userId: String!
+  spotifyId: String
+  displayName: String
+  email: AWSEmail
+  imageUrl: String
+  spotifyRefreshToken: String
+  listeningData: AWSJSON
+  topArtists: AWSJSON
+  topGenres: AWSJSON
+  lastSync: AWSDateTime
+  id: ID
+}
+
+input UpdateUserProfileInput {
+  userId: String
+  spotifyId: String
+  displayName: String
+  email: AWSEmail
+  imageUrl: String
+  spotifyRefreshToken: String
+  listeningData: AWSJSON
+  topArtists: AWSJSON
+  topGenres: AWSJSON
+  lastSync: AWSDateTime
+  id: ID!
+}
+
+input DeleteUserProfileInput {
+  id: ID!
+}
+
+input ModelSubscriptionUserProfileFilterInput {
+  userId: ModelSubscriptionStringInput
+  spotifyId: ModelSubscriptionStringInput
+  displayName: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  imageUrl: ModelSubscriptionStringInput
+  spotifyRefreshToken: ModelSubscriptionStringInput
+  listeningData: ModelSubscriptionStringInput
+  topArtists: ModelSubscriptionStringInput
+  topGenres: ModelSubscriptionStringInput
+  lastSync: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserProfileFilterInput]
+  or: [ModelSubscriptionUserProfileFilterInput]
+  owner: ModelStringInput
+}
+
+type Subscription {
+  onCreateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_subscribe(mutations: ["createUserProfile"]) @aws_iam @aws_cognito_user_pools
+  onUpdateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_subscribe(mutations: ["updateUserProfile"]) @aws_iam @aws_cognito_user_pools
+  onDeleteUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile @aws_subscribe(mutations: ["deleteUserProfile"]) @aws_iam @aws_cognito_user_pools
+  onCreateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["createEvent"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["updateEvent"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations: ["deleteEvent"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onCreateUserEvent(filter: ModelSubscriptionUserEventFilterInput, owner: String): UserEvent @aws_subscribe(mutations: ["createUserEvent"]) @aws_iam @aws_cognito_user_pools
+  onUpdateUserEvent(filter: ModelSubscriptionUserEventFilterInput, owner: String): UserEvent @aws_subscribe(mutations: ["updateUserEvent"]) @aws_iam @aws_cognito_user_pools
+  onDeleteUserEvent(filter: ModelSubscriptionUserEventFilterInput, owner: String): UserEvent @aws_subscribe(mutations: ["deleteUserEvent"]) @aws_iam @aws_cognito_user_pools
+  onCreateRecommendation(filter: ModelSubscriptionRecommendationFilterInput, owner: String): Recommendation @aws_subscribe(mutations: ["createRecommendation"]) @aws_iam @aws_cognito_user_pools
+  onUpdateRecommendation(filter: ModelSubscriptionRecommendationFilterInput, owner: String): Recommendation @aws_subscribe(mutations: ["updateRecommendation"]) @aws_iam @aws_cognito_user_pools
+  onDeleteRecommendation(filter: ModelSubscriptionRecommendationFilterInput, owner: String): Recommendation @aws_subscribe(mutations: ["deleteRecommendation"]) @aws_iam @aws_cognito_user_pools
+  onCreateLocation(filter: ModelSubscriptionLocationFilterInput): Location @aws_subscribe(mutations: ["createLocation"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onUpdateLocation(filter: ModelSubscriptionLocationFilterInput): Location @aws_subscribe(mutations: ["updateLocation"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+  onDeleteLocation(filter: ModelSubscriptionLocationFilterInput): Location @aws_subscribe(mutations: ["deleteLocation"]) @aws_api_key @aws_iam @aws_cognito_user_pools
+}
+
+type ModelEventConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [Event]!
+  nextToken: String
+}
+
+input ModelEventFilterInput {
+  eventId: ModelStringInput
+  name: ModelStringInput
+  date: ModelStringInput
+  startTime: ModelStringInput
+  endTime: ModelStringInput
+  venue: ModelStringInput
+  artists: ModelStringInput
+  genres: ModelStringInput
+  ages: ModelStringInput
+  festivalInd: ModelBooleanInput
+  electronicGenreInd: ModelBooleanInput
+  otherGenreInd: ModelBooleanInput
+  link: ModelStringInput
+  ticketLink: ModelStringInput
+  imageUrl: ModelStringInput
+  city: ModelStringInput
+  state: ModelStringInput
+  latitude: ModelFloatInput
+  longitude: ModelFloatInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelEventFilterInput]
+  or: [ModelEventFilterInput]
+  not: ModelEventFilterInput
+}
+
+input ModelEventConditionInput {
+  eventId: ModelStringInput
+  name: ModelStringInput
+  date: ModelStringInput
+  startTime: ModelStringInput
+  endTime: ModelStringInput
+  venue: ModelStringInput
+  artists: ModelStringInput
+  genres: ModelStringInput
+  ages: ModelStringInput
+  festivalInd: ModelBooleanInput
+  electronicGenreInd: ModelBooleanInput
+  otherGenreInd: ModelBooleanInput
+  link: ModelStringInput
+  ticketLink: ModelStringInput
+  imageUrl: ModelStringInput
+  city: ModelStringInput
+  state: ModelStringInput
+  latitude: ModelFloatInput
+  longitude: ModelFloatInput
+  and: [ModelEventConditionInput]
+  or: [ModelEventConditionInput]
+  not: ModelEventConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateEventInput {
+  eventId: String!
+  name: String!
+  date: AWSDate!
+  startTime: String
+  endTime: String
+  venue: AWSJSON!
+  artists: AWSJSON!
+  genres: AWSJSON
+  ages: String
+  festivalInd: Boolean
+  electronicGenreInd: Boolean
+  otherGenreInd: Boolean
+  link: String
+  ticketLink: String
+  imageUrl: String
+  city: String
+  state: String
+  latitude: Float
+  longitude: Float
+  id: ID
+}
+
+input UpdateEventInput {
+  eventId: String
+  name: String
+  date: AWSDate
+  startTime: String
+  endTime: String
+  venue: AWSJSON
+  artists: AWSJSON
+  genres: AWSJSON
+  ages: String
+  festivalInd: Boolean
+  electronicGenreInd: Boolean
+  otherGenreInd: Boolean
+  link: String
+  ticketLink: String
+  imageUrl: String
+  city: String
+  state: String
+  latitude: Float
+  longitude: Float
+  id: ID!
+}
+
+input DeleteEventInput {
+  id: ID!
+}
+
+input ModelSubscriptionEventFilterInput {
+  eventId: ModelSubscriptionStringInput
+  name: ModelSubscriptionStringInput
+  date: ModelSubscriptionStringInput
+  startTime: ModelSubscriptionStringInput
+  endTime: ModelSubscriptionStringInput
+  venue: ModelSubscriptionStringInput
+  artists: ModelSubscriptionStringInput
+  genres: ModelSubscriptionStringInput
+  ages: ModelSubscriptionStringInput
+  festivalInd: ModelSubscriptionBooleanInput
+  electronicGenreInd: ModelSubscriptionBooleanInput
+  otherGenreInd: ModelSubscriptionBooleanInput
+  link: ModelSubscriptionStringInput
+  ticketLink: ModelSubscriptionStringInput
+  imageUrl: ModelSubscriptionStringInput
+  city: ModelSubscriptionStringInput
+  state: ModelSubscriptionStringInput
+  latitude: ModelSubscriptionFloatInput
+  longitude: ModelSubscriptionFloatInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionEventFilterInput]
+  or: [ModelSubscriptionEventFilterInput]
+}
+
+type ModelUserEventConnection @aws_iam @aws_cognito_user_pools @aws_api_key {
+  items: [UserEvent]!
+  nextToken: String
+}
+
+input ModelUserEventStatusInput {
+  eq: UserEventStatus
+  ne: UserEventStatus
+}
+
+input ModelUserEventFilterInput {
+  userId: ModelStringInput
+  eventId: ModelStringInput
+  status: ModelUserEventStatusInput
+  notes: ModelStringInput
+  rating: ModelIntInput
+  addedAt: ModelStringInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelUserEventFilterInput]
+  or: [ModelUserEventFilterInput]
+  not: ModelUserEventFilterInput
+  owner: ModelStringInput
+}
+
+input ModelUserEventConditionInput {
+  userId: ModelStringInput
+  eventId: ModelStringInput
+  status: ModelUserEventStatusInput
+  notes: ModelStringInput
+  rating: ModelIntInput
+  addedAt: ModelStringInput
+  and: [ModelUserEventConditionInput]
+  or: [ModelUserEventConditionInput]
+  not: ModelUserEventConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  owner: ModelStringInput
+}
+
+input CreateUserEventInput {
+  userId: String!
+  eventId: String!
+  status: UserEventStatus
+  notes: String
+  rating: Int
+  addedAt: AWSDateTime
+  id: ID
+}
+
+input UpdateUserEventInput {
+  userId: String
+  eventId: String
+  status: UserEventStatus
+  notes: String
+  rating: Int
+  addedAt: AWSDateTime
+  id: ID!
+}
+
+input DeleteUserEventInput {
+  id: ID!
+}
+
+input ModelSubscriptionUserEventFilterInput {
+  userId: ModelSubscriptionStringInput
+  eventId: ModelSubscriptionStringInput
+  status: ModelSubscriptionStringInput
+  notes: ModelSubscriptionStringInput
+  rating: ModelSubscriptionIntInput
+  addedAt: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserEventFilterInput]
+  or: [ModelSubscriptionUserEventFilterInput]
+  owner: ModelStringInput
+}
+
+type ModelRecommendationConnection @aws_iam @aws_cognito_user_pools @aws_api_key {
+  items: [Recommendation]!
+  nextToken: String
+}
+
+input ModelRecommendationFilterInput {
+  userId: ModelStringInput
+  eventId: ModelStringInput
+  matchScore: ModelFloatInput
+  matchReasons: ModelStringInput
+  createdAt: ModelStringInput
+  id: ModelIDInput
+  updatedAt: ModelStringInput
+  and: [ModelRecommendationFilterInput]
+  or: [ModelRecommendationFilterInput]
+  not: ModelRecommendationFilterInput
+  owner: ModelStringInput
+}
+
+input ModelRecommendationConditionInput {
+  userId: ModelStringInput
+  eventId: ModelStringInput
+  matchScore: ModelFloatInput
+  matchReasons: ModelStringInput
+  createdAt: ModelStringInput
+  and: [ModelRecommendationConditionInput]
+  or: [ModelRecommendationConditionInput]
+  not: ModelRecommendationConditionInput
+  updatedAt: ModelStringInput
+  owner: ModelStringInput
+}
+
+input CreateRecommendationInput {
+  userId: String!
+  eventId: String!
+  matchScore: Float!
+  matchReasons: AWSJSON
+  createdAt: AWSDateTime
+  id: ID
+}
+
+input UpdateRecommendationInput {
+  userId: String
+  eventId: String
+  matchScore: Float
+  matchReasons: AWSJSON
+  createdAt: AWSDateTime
+  id: ID!
+}
+
+input DeleteRecommendationInput {
+  id: ID!
+}
+
+input ModelSubscriptionRecommendationFilterInput {
+  userId: ModelSubscriptionStringInput
+  eventId: ModelSubscriptionStringInput
+  matchScore: ModelSubscriptionFloatInput
+  matchReasons: ModelSubscriptionStringInput
+  createdAt: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionRecommendationFilterInput]
+  or: [ModelSubscriptionRecommendationFilterInput]
+  owner: ModelStringInput
+}
+
+type ModelLocationConnection @aws_api_key @aws_iam @aws_cognito_user_pools {
+  items: [Location]!
+  nextToken: String
+}
+
+input ModelLocationFilterInput {
+  locationId: ModelIntInput
+  city: ModelStringInput
+  state: ModelStringInput
+  stateCode: ModelStringInput
+  latitude: ModelFloatInput
+  longitude: ModelFloatInput
+  radius: ModelIntInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelLocationFilterInput]
+  or: [ModelLocationFilterInput]
+  not: ModelLocationFilterInput
+}
+
+input ModelLocationConditionInput {
+  locationId: ModelIntInput
+  city: ModelStringInput
+  state: ModelStringInput
+  stateCode: ModelStringInput
+  latitude: ModelFloatInput
+  longitude: ModelFloatInput
+  radius: ModelIntInput
+  and: [ModelLocationConditionInput]
+  or: [ModelLocationConditionInput]
+  not: ModelLocationConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateLocationInput {
+  locationId: Int!
+  city: String!
+  state: String!
+  stateCode: String!
+  latitude: Float!
+  longitude: Float!
+  radius: Int
+  id: ID
+}
+
+input UpdateLocationInput {
+  locationId: Int
+  city: String
+  state: String
+  stateCode: String
+  latitude: Float
+  longitude: Float
+  radius: Int
+  id: ID!
+}
+
+input DeleteLocationInput {
+  id: ID!
+}
+
+input ModelSubscriptionLocationFilterInput {
+  locationId: ModelSubscriptionIntInput
+  city: ModelSubscriptionStringInput
+  state: ModelSubscriptionStringInput
+  stateCode: ModelSubscriptionStringInput
+  latitude: ModelSubscriptionFloatInput
+  longitude: ModelSubscriptionFloatInput
+  radius: ModelSubscriptionIntInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionLocationFilterInput]
+  or: [ModelSubscriptionLocationFilterInput]
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyConditionInput {
+  eq: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+  le: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+  lt: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+  ge: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+  gt: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+  between: [ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput]
+  beginsWith: ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput
+}
+
+input ModelUserEventUserEventsByUserIdAndStatusAndAddedAtCompositeKeyInput {
+  status: UserEventStatus
+  addedAt: String
+}
+
+input ModelFloatKeyConditionInput {
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+}

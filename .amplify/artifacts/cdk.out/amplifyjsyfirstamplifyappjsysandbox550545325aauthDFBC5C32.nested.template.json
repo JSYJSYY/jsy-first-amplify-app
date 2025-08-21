@@ -34,6 +34,11 @@
       "Mutable": true,
       "Name": "email",
       "Required": true
+     },
+     {
+      "Mutable": true,
+      "Name": "preferred_username",
+      "Required": false
      }
     ],
     "SmsVerificationMessage": "The verification code to your new account is {####}",

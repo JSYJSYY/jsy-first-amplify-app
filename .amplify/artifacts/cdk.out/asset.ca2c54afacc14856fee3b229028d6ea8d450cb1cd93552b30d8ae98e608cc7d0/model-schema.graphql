@@ -1,0 +1,97 @@
+type UserProfile @model @auth(rules: [{allow: owner, ownerField: "owner"},
+  {allow: private, operations: [read]}])
+{
+  userId: String!
+  spotifyId: String
+  displayName: String
+  email: AWSEmail
+  imageUrl: String
+  spotifyRefreshToken: String
+  listeningData: AWSJSON
+  topArtists: AWSJSON
+  topGenres: AWSJSON
+  events: [UserEvent] @hasMany(references: ["userId"])
+  recommendations: [Recommendation] @hasMany(references: ["userId"])
+  lastSync: AWSDateTime
+}
+
+type Event @model @auth(rules: [{allow: public, provider: apiKey},
+  {allow: private, operations: [read]}])
+{
+  eventId: String!
+  name: String!
+  date: AWSDate!
+  startTime: String
+  endTime: String
+  venue: AWSJSON!
+  artists: AWSJSON!
+  genres: AWSJSON
+  ages: String
+  festivalInd: Boolean
+  electronicGenreInd: Boolean
+  otherGenreInd: Boolean
+  link: String
+  ticketLink: String
+  imageUrl: String
+  city: String @index(sortKeyFields: ["date"], queryField: "listEventByCityAndDate")
+  state: String @index(sortKeyFields: ["date"], queryField: "listEventByStateAndDate")
+  latitude: Float
+  longitude: Float
+  userEvents: [UserEvent] @hasMany(references: ["eventId"])
+  recommendations: [Recommendation] @hasMany(references: ["eventId"])
+}
+
+type UserEvent @model @auth(rules: [{allow: owner, ownerField: "owner"}])
+{
+  userId: String! @index(sortKeyFields: ["status", "addedAt"], queryField: "listUserEventByUserIdAndStatusAndAddedAt")
+  eventId: String!
+  status: UserEventStatus
+  notes: String
+  rating: Int
+  user: UserProfile @belongsTo(references: ["userId"])
+  event: Event @belongsTo(references: ["eventId"])
+  addedAt: AWSDateTime
+}
+
+type Recommendation @model @auth(rules: [{allow: owner, ownerField: "owner"},
+  {allow: private, operations: [read]}])
+{
+  userId: String! @index(sortKeyFields: ["matchScore"], queryField: "listRecommendationByUserIdAndMatchScore")
+  eventId: String!
+  matchScore: Float!
+  matchReasons: AWSJSON
+  user: UserProfile @belongsTo(references: ["userId"])
+  event: Event @belongsTo(references: ["eventId"])
+  createdAt: AWSDateTime
+}
+
+type Location @model @auth(rules: [{allow: public, provider: apiKey},
+  {allow: private, operations: [read]}])
+{
+  locationId: Int!
+  city: String! @index(queryField: "listLocationByCity")
+  state: String! @index(queryField: "listLocationByState")
+  stateCode: String!
+  latitude: Float!
+  longitude: Float!
+  radius: Int
+}
+
+enum UserEventStatus {
+  wishlist
+  attended
+  skipped
+}
+
+type Mutation {
+  syncSpotifyData(accessToken: String!, refreshToken: String): UserProfile @function(name: "syncSpotifyData") @auth(rules: [{allow: private}])
+  fetchEDMEvents(city: String, state: String, latitude: Float, longitude: Float, startDate: AWSDate, endDate: AWSDate): AWSJSON @function(name: "fetchEDMEvents") @auth(rules: [{allow: private},
+  {allow: public, provider: apiKey}])
+  generateRecommendations(userId: String!): AWSJSON @function(name: "generateRecommendations") @auth(rules: [{allow: private}])
+}
+
+type Query {
+  getUpcomingEvents(city: String, state: String, limit: Int): AWSJSON @function(name: "getUpcomingEvents") @auth(rules: [{allow: private},
+  {allow: public, provider: apiKey}])
+  getUserRecommendations(userId: String!, limit: Int): AWSJSON @function(name: "getUserRecommendations") @auth(rules: [{allow: private}])
+}

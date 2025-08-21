@@ -1,0 +1,366 @@
+type Category @aws_iam @aws_api_key {
+  name: String!
+  color: String!
+  icon: String
+  todos(filter: ModelTodoFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTodoConnection
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Todo @aws_iam @aws_api_key {
+  content: String!
+  done: Boolean
+  archived: Boolean
+  scheduledTime: AWSDateTime
+  endTime: AWSDateTime
+  isRepeating: Boolean
+  repeatPattern: String
+  repeatWeekdays: String
+  categoryId: ID
+  category: Category
+  priority: TodoPriority
+  id: ID!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum TodoPriority {
+  low
+  medium
+  high
+}
+
+input AmplifyAIConversationTurnErrorInput {
+  errorType: String!
+  message: String!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelCategoryConnection @aws_api_key @aws_iam {
+  items: [Category]!
+  nextToken: String
+}
+
+input ModelCategoryFilterInput {
+  name: ModelStringInput
+  color: ModelStringInput
+  icon: ModelStringInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelCategoryFilterInput]
+  or: [ModelCategoryFilterInput]
+  not: ModelCategoryFilterInput
+}
+
+type Query {
+  getCategory(id: ID!): Category @aws_api_key @aws_iam
+  listCategories(filter: ModelCategoryFilterInput, limit: Int, nextToken: String): ModelCategoryConnection @aws_api_key @aws_iam
+  getTodo(id: ID!): Todo @aws_api_key @aws_iam
+  listTodos(filter: ModelTodoFilterInput, limit: Int, nextToken: String): ModelTodoConnection @aws_api_key @aws_iam
+}
+
+input ModelCategoryConditionInput {
+  name: ModelStringInput
+  color: ModelStringInput
+  icon: ModelStringInput
+  and: [ModelCategoryConditionInput]
+  or: [ModelCategoryConditionInput]
+  not: ModelCategoryConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateCategoryInput {
+  name: String!
+  color: String!
+  icon: String
+  id: ID
+}
+
+input UpdateCategoryInput {
+  name: String
+  color: String
+  icon: String
+  id: ID!
+}
+
+input DeleteCategoryInput {
+  id: ID!
+}
+
+type Mutation {
+  createCategory(input: CreateCategoryInput!, condition: ModelCategoryConditionInput): Category @aws_api_key @aws_iam
+  updateCategory(input: UpdateCategoryInput!, condition: ModelCategoryConditionInput): Category @aws_api_key @aws_iam
+  deleteCategory(input: DeleteCategoryInput!, condition: ModelCategoryConditionInput): Category @aws_api_key @aws_iam
+  createTodo(input: CreateTodoInput!, condition: ModelTodoConditionInput): Todo @aws_api_key @aws_iam
+  updateTodo(input: UpdateTodoInput!, condition: ModelTodoConditionInput): Todo @aws_api_key @aws_iam
+  deleteTodo(input: DeleteTodoInput!, condition: ModelTodoConditionInput): Todo @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionCategoryFilterInput {
+  name: ModelSubscriptionStringInput
+  color: ModelSubscriptionStringInput
+  icon: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionCategoryFilterInput]
+  or: [ModelSubscriptionCategoryFilterInput]
+}
+
+type Subscription {
+  onCreateCategory(filter: ModelSubscriptionCategoryFilterInput): Category @aws_subscribe(mutations: ["createCategory"]) @aws_api_key @aws_iam
+  onUpdateCategory(filter: ModelSubscriptionCategoryFilterInput): Category @aws_subscribe(mutations: ["updateCategory"]) @aws_api_key @aws_iam
+  onDeleteCategory(filter: ModelSubscriptionCategoryFilterInput): Category @aws_subscribe(mutations: ["deleteCategory"]) @aws_api_key @aws_iam
+  onCreateTodo(filter: ModelSubscriptionTodoFilterInput): Todo @aws_subscribe(mutations: ["createTodo"]) @aws_api_key @aws_iam
+  onUpdateTodo(filter: ModelSubscriptionTodoFilterInput): Todo @aws_subscribe(mutations: ["updateTodo"]) @aws_api_key @aws_iam
+  onDeleteTodo(filter: ModelSubscriptionTodoFilterInput): Todo @aws_subscribe(mutations: ["deleteTodo"]) @aws_api_key @aws_iam
+}
+
+type ModelTodoConnection @aws_iam @aws_api_key {
+  items: [Todo]!
+  nextToken: String
+}
+
+input ModelTodoPriorityInput {
+  eq: TodoPriority
+  ne: TodoPriority
+}
+
+input ModelTodoFilterInput {
+  content: ModelStringInput
+  done: ModelBooleanInput
+  archived: ModelBooleanInput
+  scheduledTime: ModelStringInput
+  endTime: ModelStringInput
+  isRepeating: ModelBooleanInput
+  repeatPattern: ModelStringInput
+  repeatWeekdays: ModelStringInput
+  categoryId: ModelIDInput
+  priority: ModelTodoPriorityInput
+  id: ModelIDInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelTodoFilterInput]
+  or: [ModelTodoFilterInput]
+  not: ModelTodoFilterInput
+}
+
+input ModelTodoConditionInput {
+  content: ModelStringInput
+  done: ModelBooleanInput
+  archived: ModelBooleanInput
+  scheduledTime: ModelStringInput
+  endTime: ModelStringInput
+  isRepeating: ModelBooleanInput
+  repeatPattern: ModelStringInput
+  repeatWeekdays: ModelStringInput
+  categoryId: ModelIDInput
+  priority: ModelTodoPriorityInput
+  and: [ModelTodoConditionInput]
+  or: [ModelTodoConditionInput]
+  not: ModelTodoConditionInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+}
+
+input CreateTodoInput {
+  content: String!
+  done: Boolean
+  archived: Boolean
+  scheduledTime: AWSDateTime
+  endTime: AWSDateTime
+  isRepeating: Boolean
+  repeatPattern: String
+  repeatWeekdays: String
+  categoryId: ID
+  priority: TodoPriority
+  id: ID
+}
+
+input UpdateTodoInput {
+  content: String
+  done: Boolean
+  archived: Boolean
+  scheduledTime: AWSDateTime
+  endTime: AWSDateTime
+  isRepeating: Boolean
+  repeatPattern: String
+  repeatWeekdays: String
+  categoryId: ID
+  priority: TodoPriority
+  id: ID!
+}
+
+input DeleteTodoInput {
+  id: ID!
+}
+
+input ModelSubscriptionTodoFilterInput {
+  content: ModelSubscriptionStringInput
+  done: ModelSubscriptionBooleanInput
+  archived: ModelSubscriptionBooleanInput
+  scheduledTime: ModelSubscriptionStringInput
+  endTime: ModelSubscriptionStringInput
+  isRepeating: ModelSubscriptionBooleanInput
+  repeatPattern: ModelSubscriptionStringInput
+  repeatWeekdays: ModelSubscriptionStringInput
+  categoryId: ModelSubscriptionIDInput
+  priority: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  createdAt: ModelSubscriptionStringInput
+  updatedAt: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTodoFilterInput]
+  or: [ModelSubscriptionTodoFilterInput]
+}

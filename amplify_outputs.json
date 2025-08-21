@@ -170,6 +170,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "endTime": {
+              "name": "endTime",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": []
+            },
             "isRepeating": {
               "name": "isRepeating",
               "isArray": false,
@@ -179,6 +186,13 @@
             },
             "repeatPattern": {
               "name": "repeatPattern",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "repeatWeekdays": {
+              "name": "repeatWeekdays",
               "isArray": false,
               "type": "String",
               "isRequired": false,

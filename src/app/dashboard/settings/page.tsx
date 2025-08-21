@@ -59,8 +59,27 @@ export default function SettingsPage() {
       setSelectedGenres(JSON.parse(saved));
     }
     
-    const spotifyToken = localStorage.getItem('spotifyAccessToken');
-    setSpotifyConnected(!!spotifyToken);
+    // Check URL params for Spotify connection status
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('spotify') === 'connected') {
+      setSpotifyConnected(true);
+      localStorage.setItem('spotifyConnected', 'true');
+      // Clean URL
+      window.history.replaceState({}, '', '/dashboard/settings');
+    } else if (params.get('error')) {
+      const error = params.get('error');
+      if (error === 'spotify_denied') {
+        alert('Spotify authorization was denied. Please try again.');
+      } else if (error === 'token_failed') {
+        alert('Failed to connect to Spotify. Please check your app configuration.');
+      }
+      // Clean URL
+      window.history.replaceState({}, '', '/dashboard/settings');
+    } else {
+      // Check if previously connected
+      const connected = localStorage.getItem('spotifyConnected');
+      setSpotifyConnected(connected === 'true');
+    }
   };
 
   const toggleGenre = (genreId: string) => {
@@ -87,8 +106,8 @@ export default function SettingsPage() {
       return;
     }
     
-    // Use environment variable for production URL or current origin for development
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    // Use environment variable for production URL or 127.0.0.1 for development
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin.replace('localhost', '127.0.0.1');
     const redirectUri = `${baseUrl}/api/spotify/callback`;
     
     const scopes = [
@@ -160,8 +179,9 @@ export default function SettingsPage() {
                 </div>
                 <button
                   onClick={() => {
-                    localStorage.removeItem('spotifyAccessToken');
+                    localStorage.removeItem('spotifyConnected');
                     setSpotifyConnected(false);
+                    // In production, you'd also revoke the token server-side
                   }}
                   className="px-4 py-2 cyber-border font-mono text-sm hover:bg-red-500/20 transition-all"
                   style={{color: 'var(--cyber-hot-pink)'}}

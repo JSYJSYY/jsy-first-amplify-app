@@ -9,7 +9,7 @@
      - App Name: "RavePulse" (or your app name)
      - App Description: "Real-time EDM event recommendations"
      - Website: http://localhost:3001
-     - Redirect URI: http://localhost:3001/api/spotify/callback
+     - Redirect URI: http://127.0.0.1:3001/api/spotify/callback
    - Select "Web API" as the API/SDK
    - Accept the terms and create
 
@@ -85,7 +85,7 @@
 Create separate Spotify apps for each environment:
 
 1. **Development App**:
-   - Redirect URI: http://localhost:3001/api/spotify/callback
+   - Redirect URI: http://127.0.0.1:3001/api/spotify/callback
    - Client ID: dev_client_id
 
 2. **Staging App**:

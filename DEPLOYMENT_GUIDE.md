@@ -60,8 +60,8 @@ After deployment, you'll get a URL like:
 
 3. **Add Redirect URIs** (you can have multiple):
    ```
-   # For development
-   http://localhost:3001/api/spotify/callback
+   # For development (use 127.0.0.1 instead of localhost)
+   http://127.0.0.1:3001/api/spotify/callback
    
    # For production (replace with your actual URL)
    https://main.d1234567890abc.amplifyapp.com/api/spotify/callback
@@ -132,7 +132,7 @@ aws amplify get-app --app-id YOUR_APP_ID --query 'app.defaultDomain'
 ## Testing Flow
 
 1. **Local Development**:
-   - Use `http://localhost:3001` URLs
+   - Use `http://127.0.0.1:3001` URLs
    - Test with dev Spotify app
 
 2. **Staging**:
